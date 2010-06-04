@@ -9,7 +9,7 @@ use Scalar::Util ();
 use strict;
 use vars qw($VERSION @EXPORT);
 
-$VERSION = '1.04';
+$VERSION = '1.05';
 
 require Exporter;
 
@@ -458,6 +458,10 @@ sub _tt_add_devpopup_info {
     $dumper->Varname('Params');
     $dumper->Indent(2);
     my $dump = $dumper->Dump();
+
+    # Entity encode the output since it will be displayed on a webpage and we
+    # want all HTML content rendered as text (borrowed from HTML::Entities)
+    $dump =~ s/([^\n\r\t !\#\$%\(-;=?-~])/sprintf "&#x%X;", ord($1)/ge;
 
     $self->devpopup->add_report(
         title   => "TT params for $name",

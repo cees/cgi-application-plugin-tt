@@ -11,11 +11,11 @@ my $file   = rel2abs(catfile($tt_dir, 'test_mode.tmpl'));
 
 test_success('tmpl');
 test_success(qr/\.(tt|tmpl|html)$/);
-test_success(sub { $_[0] eq $file });
+test_success(sub { rel2abs($_[0]) eq $file });
 
 test_failure('nottmpl');
 test_failure(qr/\.(nottmpl)$/);
-test_failure(sub { $_[0] eq 'blahblah' });
+test_failure(sub { rel2abs($_[0]) eq 'blahblah' });
 
 
 sub test_success {
@@ -29,7 +29,7 @@ sub test_success {
     # This is kinda dirty since we are peeking pretty far into TT's internals
     # but it doesn't expose this stuff externally
     is(
-        $tt->{SERVICE}->{CONTEXT}->{LOAD_TEMPLATES}->[0]->{HEAD}->[1],
+        rel2abs($tt->{SERVICE}->{CONTEXT}->{LOAD_TEMPLATES}->[0]->{HEAD}->[1]),
         $file,
         'file is cached'
     );

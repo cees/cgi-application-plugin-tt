@@ -15,7 +15,7 @@ BEGIN {
     }
 }
 
-plan tests => 2;
+plan tests => 3;
 
 $ENV{CGI_APP_RETURN_ONLY} = 1;
 
@@ -25,5 +25,6 @@ my $t1_obj = TestAppDevPopup->new();
 my $t1_output = $t1_obj->run();
 
 like($t1_output, qr/template param\./, 'template parameter');
+like($t1_output, qr/&#x3C;div class=&#x22;test&#x22;&#x3E;&#x3C;\/div&#x3E;/, 'HTML tags were encoded as entities');
 like($t1_output, qr/TT params for/, 'popup title found');
 
